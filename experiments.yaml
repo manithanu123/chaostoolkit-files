@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chaostoolkit-experiments
+data:
+  health-http.yaml: |
+    version: 1.0.0
+    title: What happens if we abruptly kill the pod
+    description: If an instance of the application is terminated abruptly, the applications as a whole should still be operational.
+    tags:
+    - k8s
+    - pod
+    method:
+    - type: action
+      name: delete-app-pod
+      provider:
+        type: python
+        module: chaosk8s.pod.actions
+        func: delete_pods
+        arguments:
+          label_selector: app=go-demo-8
+          rand: true
+          ns: go-demo-8
